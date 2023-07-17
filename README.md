@@ -4,7 +4,7 @@
 
 THID is an end-to-end transformer-based human-object interaction (HOI) detector. [[Paper]](https://cse.buffalo.edu/~jsyuan/papers/2022/CVPR2022_4126.pdf)
 
-![THID](./figures/AMP-HOI_arch.png)
+![AMP-HOI](./figures/AMP-HOI_arch.png)
 
 - **Motivation**: It is difficult to construct a data collection including all possible combinations of human actions and interacting objects due to the combinatorial nature of human-object interactions (HOI). In this work, we aim to develop a transferable HOI detector for the wide range of unseen interactions.
 - **Components**: (1) We treat independent HOI labels as the natural language supervision of interactions and embed them into a joint visual-and-text space to capture their correlations. (2) Our visual encoder is instantiated as a Vision Transformer with new learnable HOI tokens and a sequence parser to generate HOI predictions with bounding boxes. (3) It distills and leverages the transferable knowledge from the pretrained CLIP model to perform the zero-shot interaction detection.
