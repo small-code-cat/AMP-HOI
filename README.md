@@ -1,13 +1,13 @@
-# Transferable Human-object Interaction Detector (THID)
+# Adaptive Multimodal Prompt for Human-Object Interaction with Local Feature Enhanced Transformer (AMP-HOI)
 
 ## Overview
 
-THID is an end-to-end transformer-based human-object interaction (HOI) detector. [[Paper]](https://cse.buffalo.edu/~jsyuan/papers/2022/CVPR2022_4126.pdf)
+AMP-HOI is an end-to-end transformer-based and cnn-based human-object interaction (HOI) detector. [[Paper]]()
 
 ![AMP-HOI](./figures/AMP-HOI_arch.png)
 
-- **Motivation**: It is difficult to construct a data collection including all possible combinations of human actions and interacting objects due to the combinatorial nature of human-object interactions (HOI). In this work, we aim to develop a transferable HOI detector for the wide range of unseen interactions.
-- **Components**: (1) We treat independent HOI labels as the natural language supervision of interactions and embed them into a joint visual-and-text space to capture their correlations. (2) Our visual encoder is instantiated as a Vision Transformer with new learnable HOI tokens and a sequence parser to generate HOI predictions with bounding boxes. (3) It distills and leverages the transferable knowledge from the pretrained CLIP model to perform the zero-shot interaction detection.
+- **Motivation**: (1) The loss of crucial features from the original modality during contrastive learning. (2) The limited ability of Transformer-based network architectures to extract local features from samples. (3) There is still room for improvement in the application of prompt learning on HOI.
+- **Components**: (1) We proposed an Adaptive Multimodal Prompt module that facilitates the interaction of multimodal cues and provides specific and applicable cues for different modalities. (2) We introduced a novel multimodal feature extraction module called the Local Feature Enhanced Transformer (LFET), which effectively extracts multimodal features from both global and local perspectives.
 
 ## Preparation
 
@@ -22,7 +22,7 @@ pip install ftfy regex tqdm numpy Pillow matplotlib
 
 ### Dataset
 
-The experiments are mainly conducted on **HICO-DET** and **SWIG-HOI** dataset. We follow [this repo](https://github.com/YueLiao/PPDM) to prepare the HICO-DET dataset. And we follow [this repo](https://github.com/scwangdyd/large_vocabulary_hoi_detection) to prepare the SWIG-HOI dataset.
+The experiments are mainly conducted on **HICO-DET** dataset. We follow [this repo](https://github.com/YueLiao/PPDM) to prepare the HICO-DET dataset.
 
 #### HICO-DET
 
@@ -48,10 +48,17 @@ Run this command to train the model in HICO-DET dataset
 python -m torch.distributed.launch --nproc_per_node=2 --use_env main.py \
     --batch_size 8 \
     --output_dir [path to save checkpoint] \
-    --epochs 100 \
+    --epochs 30 \
     --lr 1e-4 --min-lr 1e-7 \
-    --hoi_token_length 50 \
+    --hoi_token_length 10 \
     --enable_dec \
+    --enable_resnet50 \
+    --enable_gru \
+    --enable_text_lambda \
+    --enable_visual_lambda1 \
+    --enable_visual_lambda2 \
+    --lamb 0.6 \
+    --enable_unified_prompt \
     --dataset_file hico
 ```
 
@@ -63,11 +70,18 @@ Run this command to evaluate the model on HICO-DET dataset
 python main.py --eval \
     --batch_size 1 \
     --output_dir [path to save results] \
-    --hoi_token_length 50 \
+    --hoi_token_length 10 \
     --enable_dec \
     --pretrained [path to the pretrained model] \
     --eval_size 256 [or 224 448 ...] \
     --test_score_thresh 1e-4 \
+    --enable_resnet50 \
+    --enable_gru \
+    --enable_text_lambda \
+    --enable_visual_lambda1 \
+    --enable_visual_lambda2 \
+    --lamb 0.6 \
+    --enable_unified_prompt \
     --dataset_file hico
 ```
 
@@ -75,7 +89,7 @@ python main.py --eval \
 
 |   Model   | dataset | HOI Tokens | AP seen | AP unseen | Log | Checkpoint |
 |:---------:| :-----: | :-----: |:-------:|:---------:| :-----: | :-----: |
-| `AMP-HOI` | HICO-DET | 10 |    -    |     -     | [Log](https://github.com/scwangdyd/promting_hoi/releases/download/v0.2/thid_hico_token10_epoch100_log.txt) | [params](https://github.com/scwangdyd/promting_hoi/releases/download/v0.2/thid_hico_token10_epoch100.pth)|
+| `AMP-HOI` | HICO-DET | 10 |  23.33  |   21.75   | [Log](https://github.com/scwangdyd/promting_hoi/releases/download/v0.2/thid_hico_token10_epoch100_log.txt) | [params](https://github.com/scwangdyd/promting_hoi/releases/download/v0.2/thid_hico_token10_epoch100.pth)|
 
 ## Citing
 
