@@ -87,9 +87,9 @@ python main.py --eval \
 
 ## Models
 
-|   Model   | dataset | HOI Tokens | AP seen | AP unseen | Log | Checkpoint |
-|:---------:| :-----: | :-----: |:-------:|:---------:| :-----: | :-----: |
-| `AMP-HOI` | HICO-DET | 10 |  23.33  |   21.75   | [Log](https://github.com/scwangdyd/promting_hoi/releases/download/v0.2/thid_hico_token10_epoch100_log.txt) | [params](https://github.com/scwangdyd/promting_hoi/releases/download/v0.2/thid_hico_token10_epoch100.pth)|
+|   Model   | dataset | HOI Tokens | AP seen | AP unseen | Full  | Checkpoint  |
+|:---------:| :-----: | :-----: |:-------:|:---------:|:-----:|:-----------:|
+| `AMP-HOI` | HICO-DET | 10 |  25.91  |   19.23   | 24.44 | [params](#) |
 
 ## Citing
 
